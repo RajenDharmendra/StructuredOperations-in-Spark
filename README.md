@@ -96,3 +96,62 @@ we can create DataFrames from raw data sources.  we will also register this as a
                         val myDf = spark.createDataFrame(myRDD, myManualSchema)
                         myDf.show()
                   
+# Select
+
+Select  allow us to do the DataFrame equivalent of SQL queries on a table of data.
+
+
+            SELECT * FROM dataFrameTable
+            SELECT columnName FROM dataFrameTable
+            SELECT columnName * 10, otherColumn, someOtherCol as c FROM dataFrameTable
+            
+In the simplest possible terms, it allows us to manipulate columns in our DataFrames. Let’s walk through some examples on DataFrames to talk about some of the different ways of approaching this problem. The easiest way is just to use the select method and pass in the column names as string that you would like to work with.
+
+            df.select("DEST_COUNTRY_NAME").show(2)
+            %sql
+            SELECT DEST_COUNTRY_NAME
+            FROM dfTable
+            LIMIT 2
+            
+As we’ve seen thus far, expr is the most flexible reference that we can use. It can refer to a plain column or a string manipulation of a column. To illustrate, let’s change our column name, then change it back as an example using the AS keyword and then the alias method on the column.
+
+            df.select(expr("DEST_COUNTRY_NAME AS destination"))
+            
+            
+            %sql
+
+            SELECT
+            DEST_COUNTRY_NAME as destination
+            FROM
+             dfTable
+             
+             
+             
+            %sql
+            
+            SELECT
+             *,
+             (DEST_COUNTRY_NAME = ORIGIN_COUNTRY_NAME) as withinCountry
+            FROM
+              dfTable
+              
+              
+              
+we can specify aggregations over the entire DataFrame 
+
+            %sql
+
+            SELECT
+              avg(count),
+             count(distinct(DEST_COUNTRY_NAME))
+            FROM
+            dfTable
+         
+         
+Renaming Columns
+
+we can remane a column using the withColumnRenamed method. This will rename the column with the name of the string in the first argument, to the string in the second argument.
+
+    
+            df.withColumnRenamed("DEST_COUNTRY_NAME", "dest").columns
+            
