@@ -155,3 +155,55 @@ we can remane a column using the withColumnRenamed method. This will rename the 
     
             df.withColumnRenamed("DEST_COUNTRY_NAME", "dest").columns
             
+# Removing Columns
+
+Now that we’ve created this column, let’s take a look at how we can remove columns from DataFrames. However there is also a dedicated method called drop.
+            
+            df.drop("ORIGIN_COUNTRY_NAME").columns
+            
+We can drop multiple columns by passing in multiple columns as arguments.
+
+           dfWithLongColName.drop("ORIGIN_COUNTRY_NAME", "DEST_COUNTRY_NAME")
+     
+Changing a Column’s Type (cast)
+
+Sometimes we may need to convert from one type to another, for example if we have a set of StringType that should be integers. We can convert columns from one type to another by casting the column from one type to another. For instance let’s convert our count column from an integer to a Long type.
+
+            %sql
+
+            SELECT
+            cast(count as int)
+            FROM
+             dfTable
+          
+Getting Unique Rows
+
+A very common use case is to get the unique or distinct values in a DataFrame. These values can be in one or more columns. The way we do this is with the distinct method on a DataFrame that will allow us to deduplicate any rows that are in that DataFrame. For instance let’s get the unique origins in our dataset. This of course is a transformation that will return a new DataFrame with only unique rows.
+            
+            df.select("ORIGIN_COUNTRY_NAME").distinct().count()
+            
+            df.select("ORIGIN_COUNTRY_NAME", "DEST_COUNTRY_NAME").count()
+     
+using %sql
+            
+            %sql
+
+            SELECT
+             COUNT(DISTINCT ORIGIN_COUNTRY_NAME, DEST_COUNTRY_NAME)
+            FROM dfTable
+            
+            
+            %sql
+            SELECT
+              COUNT(DISTINCT ORIGIN_COUNTRY_NAME)
+            FROM dfTable
+         
+Random Samples
+
+Sometimes you may just want to sample some random records from your DataFrame. This is done with the sample method on a DataFrame that allows you to specify a fraction of rows to extract from a DataFrame and whether you’d like to sample with or without replacement.
+
+            val seed = 5
+            val withReplacement = false
+            val fraction = 0.5
+
+            df.sample(withReplacement, fraction, seed).count()
