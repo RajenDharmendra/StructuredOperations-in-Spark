@@ -25,13 +25,29 @@ Here’s out to create, and enforce a specific schema on a DataFrame. If the typ
               .schema(myManualSchema)
               .load("path/to/json/file.json.json")
               
-#Columns and Expressions
+# Columns and Expressions
 
 columns in Spark are similar to columns in a spreadsheet, R dataframe, pandas DataFrame. We can select, manipulate, and remove columns from DataFrames and these operations are represented as expressions.
 
 To Spark, columns are logical constructions that simply represent a value computed on a per-record basis by means of an expression. This means, in order to have a real value for a column, we need to have a row, and in order to have a row we need to have a DataFrame. This means that we cannot manipulate an actual column outside of a DataFrame, we can only manipulate a logical column’s expressions then perform that expression within the context of a DataFrame.
 
+# Accessing a DataFrame’s Columns
+
+Sometimes you’ll need to see a DataFrame’s columns, you can do this by doing something like printSchema however if you want to programmatically access columns, you can use the columns method to see all columns listed.
+
+                  Sometimes you’ll need to see a DataFrame’s columns, you can do this by doing something like printSchema however if you want to programmatically access columns, you can use the columns method to see all columns listed.
+
+                        spark.read.format("json")
+                          .load("/mnt/defg/flight-data/json/2015-summary.json")
+                          .columns
+                          
+ # Records and Rows
+ 
+In Spark, a record or row makes up a “row” in a DataFrame. A logical record or row is an object of type Row. Row objects are the objects that column expressions operate on to produce some usable value. Row objects represent physical byte arrays. The byte array interface is never shown to users because we only use column expressions to manipulate them.
 
 
+We can see a row by calling first on our DataFrame.
 
+                        df.first()
+                    
 
