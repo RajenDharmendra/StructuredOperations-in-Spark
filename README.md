@@ -51,3 +51,48 @@ We can see a row by calling first on our DataFrame.
                         df.first()
                     
 
+
+# DataFrame Transformations
+
+Now that we briefly defined the core parts of a DataFrame, we will move onto manipulating DataFrames. When working with individual DataFrames there are some fundamental objectives. These break down into several core operations.
+
+
+
+    We can add rows or columns
+
+    We can remove rows or columns
+
+    We can transform a row into a column (or vice versa)
+
+    We can change the order of rows based on the values in columns
+
+Luckily we can translate all of these into simple transformations, the most common being those that take one column, change it row by row, and then return our results.
+
+Creating DataFrames
+
+we can create DataFrames from raw data sources.  we will also register this as a temporary view so that we can query it with SQL.
+
+                        val df = spark.read.format("json")
+             .load("path/to/file.json")
+
+                  df.createOrReplaceTempView("dfTable")
+                  
+                  
+  We can also create DataFrames on the fly by taking a set of rows and converting them to a DataFrame.
+  
+                        import org.apache.spark.sql.Row
+                        import org.apache.spark.sql.types.{StructField, StructType,
+                                   StringType, LongType}
+
+                        val myManualSchema = new StructType(Array(
+                        new StructField("some", StringType, true),
+                        new StructField("col", StringType, true),
+                        new StructField("names", LongType, false) // just to illustrate flipping this flag
+                        ))
+
+                        val myRows = Seq(Row("Hello", null, 1L))
+                        val myRDD = spark.sparkContext.parallelize(myRows)
+
+                        val myDf = spark.createDataFrame(myRDD, myManualSchema)
+                        myDf.show()
+                  
