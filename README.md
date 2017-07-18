@@ -207,3 +207,14 @@ Sometimes you may just want to sample some random records from your DataFrame. T
             val fraction = 0.5
 
             df.sample(withReplacement, fraction, seed).count()
+            
+            
+# Regular Expressions
+
+Probably one of the most frequently performed tasks is searching for the existance of one string on another or replacing all mentions of a string with another value. This is often done with a tool called “Regular Expressions” that exist in many programming languages. Regular expressions give the user an ability to specify a set of rules to use to either extract values from a string or replace them with some other values.
+
+Spark leverages the complete power of Java Regular Expressions. The syntax departs slightly from other programming languages so it is worth reviewing before putting anything into production.. There are two key functions in Spark that you’ll need to perform regular expression tasks: regexp_extract and regexp_replace. These functions extract values and replace values respectively.
+
+
+
+
